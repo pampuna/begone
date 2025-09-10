@@ -1,5 +1,7 @@
 # Begone
 
+This is a proof of concept tool created for demonstrative purposes and pentesting. The tool is not "production" worthy and should be treated as such. If you want to try it, review the disclaimer below.
+
 This setup script (`begone.sh`) creates a service which acts as a gateway to redirect or proxy a specified endpoints based on a subdomain. It has the following features:
 
 - If a subdomain is specified, fetch its mapping.
