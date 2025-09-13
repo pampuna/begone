@@ -46,7 +46,9 @@ For example, an `bindings.json` configured for with multiple localhost-like bind
     "l6": { "target": "http://0.0.0.0", "redirect": 302, "keep_path": true, "proxy": false },
     "l7": { "target": "http://localhost.localdomain", "redirect": 302, "keep_path": true, "proxy": false },
     "l8": { "target": "http://loopback", "redirect": 302, "keep_path": true, "proxy": false },
-    "l9": { "target": "http://127.0.0.1:8080", "redirect": 302, "keep_path": true, "proxy": false }
+    "l9": { "target": "http://127.0.0.1:3000", "redirect": 302, "keep_path": false, "proxy": false },
+    "l10": { "target": "http://127.0.0.1:8000", "redirect": 302, "keep_path": false, "proxy": false },
+    "l11": { "target": "http://127.0.0.1:8080", "redirect": 302, "keep_path": false, "proxy": false }
 }
 ```
 
