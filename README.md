@@ -5,7 +5,7 @@ This is a proof of concept tool created for demonstrative purposes and pentestin
 This setup script (`begone.sh`) creates a service which acts as a gateway to redirect or proxy a specified endpoints based on a subdomain. It has the following features:
 
 - If a subdomain is specified, fetch its mapping.
-- Using the mapping either redirect using the set status code or proxy the target.
+- Using the mapping either redirect using the set status code or proxy the target. If set, pass along the source path to the target.
 - Support both HTTP and HTTPS.
 - If the main domain or an unknown subdomain is approached, return a 404.
 - Ignores source paths, but is able to write to target paths.
@@ -27,7 +27,30 @@ On first time setup, or if your certificate has expired, the script will prompt 
 
 ## Updating Bindings
 
-Subdomain bindings can be added or removed by updating `bindings.json`. After updating the file, restart the `begone` service.
+Subdomain bindings can be added or removed by updating `bindings.json`. A binding has the following properties:
+
+- target: The target domain including the protocol.
+- redirect: Set to redirect by subdomain function. Its value is used as the redirect status code.
+- keep_path: Toggle to combine the source path and target domain.
+- proxy: Set to let the service proxy the target and return fetched contents. If both redirect and proxy are set, a redirect will happen.
+
+For example, an `bindings.json` configured for with multiple localhost-like bindings could look like this:  
+
+```json
+{
+    "l1": { "target": "http://127.0.0.1", "redirect": 302, "keep_path": true, "proxy": false },
+    "l2": { "target": "http://127.0.0.1", "redirect": 307, "keep_path": true, "proxy": false },
+    "l3": { "target": "http://127.1", "redirect": 302, "keep_path": true, "proxy": false },
+    "l4": { "target": "http://localhost", "redirect": 302, "keep_path": true, "proxy": false },
+    "l5": { "target": "http://[::1]", "redirect": 302, "keep_path": true, "proxy": false },
+    "l6": { "target": "http://0.0.0.0", "redirect": 302, "keep_path": true, "proxy": false },
+    "l7": { "target": "http://localhost.localdomain", "redirect": 302, "keep_path": true, "proxy": false },
+    "l8": { "target": "http://loopback", "redirect": 302, "keep_path": true, "proxy": false },
+    "l9": { "target": "http://127.0.0.1:8080", "redirect": 302, "keep_path": true, "proxy": false }
+}
+```
+
+After updating the file, restart the `begone` service:
 
 ```sh
 nano /opt/begone/bindings.json
