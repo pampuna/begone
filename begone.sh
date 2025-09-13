@@ -48,6 +48,7 @@ import os
 import re
 import logging
 import requests
+import urllib.parse
 from flask import Flask, request, Response, redirect, abort
 
 app = Flask(__name__)
@@ -89,7 +90,9 @@ def index(path):
 
     mapping = bindings_map.get(sub)
     if mapping:
-        (target, redirect_status_code, proxy) = mapping.values()
+        (target, redirect_status_code, keep_path, proxy) = mapping.values()
+        if keep_path and path:
+            target = urllib.parse.urljoin(target, path)
         if redirect_status_code and not proxy:
             return redirect(target, code=redirect_status_code)
         elif proxy:
@@ -115,7 +118,7 @@ echo "Creating default bindings.json (if not exists)..."
 if [ ! -f "$APP_DIR/bindings.json" ]; then
 cat > "$APP_DIR/bindings.json" <<EOF
 {
-    "localhost": { "target": "http://127.0.0.1", "redirect": 302, "proxy": false }
+    "localhost": { "target": "http://127.0.0.1", "redirect": 302, "keep_path": false, "proxy": false }
 }
 EOF
   chown www-data:www-data "$APP_DIR/bindings.json"
